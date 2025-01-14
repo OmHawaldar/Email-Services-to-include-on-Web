@@ -1,0 +1,49 @@
+Create an index.html file:
+html
+Copy code
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Service</title>
+</head>
+<body>
+    <h1>Send Email</h1>
+    <form id="emailForm">
+        <label for="to">Recipient Email:</label>
+        <input type="email" id="to" name="to" required><br><br>
+        <label for="subject">Subject:</label>
+        <input type="text" id="subject" name="subject" required><br><br>
+        <label for="message">Message:</label>
+        <textarea id="message" name="message" required></textarea><br><br>
+        <button type="submit">Send Email</button>
+    </form>
+
+    <script>
+        const form = document.getElementById('emailForm');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const to = document.getElementById('to').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+
+            try {
+                const response = await fetch('http://localhost:3000/send-email', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ to, subject, message })
+                });
+
+                const result = await response.json();
+                alert(result.message);
+            } catch (error) {
+                alert('Failed to send email. Please try again.');
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</body>
+</html>
