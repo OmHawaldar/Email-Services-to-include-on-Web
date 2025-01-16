@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Reminder System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            margin-top: 20px;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .recipients {
+            margin-top: 20px;
+        }
+        .recipients ul {
+            list-style: none;
+            padding: 0;
+        }
+        .recipients ul li {
+            background: #e9ecef;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Email Reminder System</h1>
+        <form id="addRecipientForm">
+            <input type="email" id="emailInput" placeholder="Enter recipient email" required />
+            <button type="submit">Add Recipient</button>
+        </form>
+        <div class="recipients">
+            <h2>Recipient List</h2>
+            <ul id="recipientList"></ul>
+        </div>
+    </div>
+
+    <script>
+        // Function to add recipient via POST request
+        async function addRecipient(email) {
+            const response = await fetch('http://localhost:3000/add-recipient', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email: email }),
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                console.log('Recipient added:', data);
+                loadRecipients();  // Reload the recipients list after adding
+            } else {
+                console.log('Failed to add recipient:', data.message);
+            }
+        }
+
+        // Function to load the list of recipients from the backend
+        async function loadRecipients() {
+            const response = await fetch('http://localhost:3000/get-recipients');
+            const data = await response.json();
+            const recipientList = document.getElementById('recipientList');
+            recipientList.innerHTML = '';  // Clear existing list
+
+            data.recipients.forEach(email => {
+                const listItem = document.createElement('li');
+                listItem.textContent = email;
+                recipientList.appendChild(listItem);
+            });
+        }
+
+        // Event listener for the form submission
+        document.getElementById('addRecipientForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const emailInput = document.getElementById('emailInput');
+            const email = emailInput.value.trim();
+            if (email) {
+                addRecipient(email);
+                emailInput.value = '';  // Clear the input after submission
+            }
+        });
+
+        // Initial load of recipients when the page loads
+        window.onload = loadRecipients;
+    </script>
+</body>
+</html>
