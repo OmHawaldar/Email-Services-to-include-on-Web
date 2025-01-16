@@ -22,8 +22,8 @@ function sendReminders() {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'omh1ga22is407@gmail.com', // Replace with your Gmail address
-            pass: 'cfwe kebo dans gfwn'   // Replace with your Gmail app password
+            user: 'yuuoooooorrrsss', // Replace with your Gmail address
+            pass: 'dev D'   // Replace with your Gmail app password
         }
     });
 
