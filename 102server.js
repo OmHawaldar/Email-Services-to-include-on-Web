@@ -29,7 +29,7 @@ function sendReminders() {
 
     // Email options
     const mailOptions = {
-        from: 'omh1ga22is407email@gmail.com',  // Sender's email
+        from: 'yoursEmail@gmail.com',  // Sender's email
         to: emailRecipients,           // List of recipients
         subject: 'Reminder Email',
         text: 'This is a reminder email sent every 2 minutes.'
@@ -61,7 +61,7 @@ app.get('/get-recipients', (req, res) => {
     res.status(200).json({ recipients: emailRecipients });
 });
 
-// Schedule the task to send emails every 2 minutes
+// Schedule the task to send emails every 2 minutes, can be changed
 schedule.scheduleJob('*/2 * * * *', () => {
     sendReminders();
     console.log('Email reminders sent at:', new Date().toLocaleTimeString());
